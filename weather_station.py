@@ -175,9 +175,15 @@ def main():
     fig_width = FIG_WIDTH_INCHES * 100  # pixels
     fig_height = FIG_HEIGHT_INCHES * 100  # pixels
 
-    # Raw data from API
+    # Data from API
     dates = [hour_item.dt_dt for hour_item in weather.hourly][:FORECAST_HOURS_COUNT]
     temperatures = [hour_item.temp for hour_item in weather.hourly][:FORECAST_HOURS_COUNT]
+
+    precips = []
+    for hour_item in weather.hourly[:FORECAST_HOURS_COUNT]:
+        rain = hour_item.rain.get("1h", 0) if hour_item.rain else 0
+        snow = hour_item.snow.get("1h", 0) if hour_item.snow else 0
+        precips.append(rain + snow)
 
     # Create figures
     fig, ax = plt.subplots(figsize=[FIG_WIDTH_INCHES, FIG_HEIGHT_INCHES])
@@ -193,11 +199,16 @@ def main():
     ax.xaxis.set_major_locator(mdates.HourLocator(interval = 1))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H'))
 
+    # Creates plot
     temp_points, = ax.plot(dates[:FORECAST_HOURS_COUNT], temperatures, color="black", marker="o")
 
     # Y axis
     ax.set_ylabel(f'{chr(176)}C', rotation=0, loc="top")
     ax.yaxis.set_label_coords(-0.08, 0.98)
+    
+    # Move axis up in Z layer up - temperatures above precipitations
+    ax.set_zorder(1)
+    ax.patch.set_visible(False)
 
     # Setting y max/min label value always bigger/smaller than min/max temperature value
     y_ticks = ax.get_yticks()
@@ -209,6 +220,31 @@ def main():
     ax.set_ylim(bottom=y_ticks[0] - 0.1, top=y_ticks[-1] + 0.1)  # set y-axis limits always bigger/smaller than label value
 
     plt.rcParams['axes.autolimit_mode'] = 'round_numbers'
+
+
+    # Precipitation Y-axis
+    ax2 = ax.twinx()
+
+    # Remove outlines
+    ax2.spines['top'].set_visible(False)
+    ax2.spines['right'].set_visible(False)
+    ax2.spines['left'].set_visible(False)
+
+    ax2.set_ylabel(f'mm/h', rotation=0, loc="top")
+    ax2.yaxis.set_label_coords(1.11, 1.05)
+
+    # Creates plot
+    ax2.bar(dates, precips, width=0.017, color='lightgrey')
+
+    # Setting y max/min label value always bigger/smaller than min/max precipitation value
+    max_lim = max(precips) * 2 or 1
+    ax2.set_ylim(bottom=0, top=max_lim)  # precipitation plot only on the half of the plot
+    ticks = ax2.get_yticks()
+    if max(precips) == 0:
+        ticks = ticks[0:1]
+    else:
+        ticks = [tick for index, tick in enumerate(ticks) if not (index > 0 and ticks[index-1] > max(precips))]
+    ax2.set_yticks(ticks)
 
     # Save to in-memory bufor
     img_buf = io.BytesIO()
