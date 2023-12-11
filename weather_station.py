@@ -246,6 +246,49 @@ def main():
         ticks = [tick for index, tick in enumerate(ticks) if not (index > 0 and ticks[index-1] > max(precips))]
     ax2.set_yticks(ticks)
 
+
+    # Add sunrise / sunset icons
+    ICON_SIZE = 30
+    center_offs = ICON_SIZE / 2
+    sunrise_icon = Image.open('./images/sunrise.png').resize((ICON_SIZE,) * 2)
+    sunset_icon = Image.open('./images/sunset.png').resize((ICON_SIZE,) * 2)
+
+    # Get the x and y data and transform it into pixel coordinates
+    x, y = temp_points.get_data()
+    x = [mdates.date2num(date) for date in x]  # x values as nums instead of datetime
+    
+    # Gets sunrise time
+    sunrise_time = weather.current.sunrise_dt
+    if sunrise_time < weather.hourly[0].dt_dt:
+        sunrise_time = weather.daily[1].sunrise_dt
+
+    # Gets sunset time
+    sunset_time = weather.current.sunset_dt
+    if sunset_time < weather.hourly[0].dt_dt:
+        sunset_time = weather.daily[1].sunset_dt
+
+    # Calculate pixel positions
+    x_sunrise_pix_pos, y_sunrise_pix_pos = ax.transData.transform((mdates.date2num(sunrise_time), ax.get_yticks()[-1]))
+    x_sunset_pix_pos, _ = ax.transData.transform((mdates.date2num(sunset_time), 0))
+    y_pix_pos = y_sunrise_pix_pos - 5
+
+    # Insert icons
+    fig.figimage(sunrise_icon, xo=x_sunrise_pix_pos - center_offs, yo=y_pix_pos)
+    fig.figimage(sunset_icon, xo=x_sunset_pix_pos - center_offs, yo=y_pix_pos)
+
+    # Add sunrise time
+    ax.text(*(ax.transData.inverted().transform((x_sunrise_pix_pos + center_offs, y_pix_pos + 5))),  f'({sunrise_time.strftime('%H:%M')})',
+        verticalalignment='bottom', horizontalalignment='left',
+        transform=ax.transData,
+        color='black', fontsize=9)
+
+    # Add sunset time
+    ax.text(*(ax.transData.inverted().transform((x_sunset_pix_pos + center_offs, y_pix_pos + 5))),  f'({sunset_time.strftime('%H:%M')})',
+        verticalalignment='bottom', horizontalalignment='left',
+        transform=ax.transData,
+        color='black', fontsize=9)
+
+
     # Save to in-memory bufor
     img_buf = io.BytesIO()
     fig.savefig(img_buf, format='png', dpi=fig.dpi)
