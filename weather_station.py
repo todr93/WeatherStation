@@ -2,6 +2,9 @@ from PIL import Image
 from PIL import  ImageDraw
 from PIL import  ImageFont
 import datetime
+import io
+from matplotlib import pyplot as plt
+from matplotlib import dates as mdates
 
 import weather as wlib
 
@@ -162,6 +165,57 @@ def main():
         text_3 = str(precip)
         x_pos_3 = 265 - draw.textlength(text_3, daily_info_small_font) / 2
         draw.text((x_pos_3, 5 + Y_START_POS + index * Y_SPACE), text_3, font=daily_info_small_font)
+
+
+    ### GRAPH - HOURLY FORECAST ###
+
+    FORECAST_HOURS_COUNT = 16
+    FIG_WIDTH_INCHES = 4.98
+    FIG_HEIGHT_INCHES = 2.38
+    fig_width = FIG_WIDTH_INCHES * 100  # pixels
+    fig_height = FIG_HEIGHT_INCHES * 100  # pixels
+
+    # Raw data from API
+    dates = [hour_item.dt_dt for hour_item in weather.hourly][:FORECAST_HOURS_COUNT]
+    temperatures = [hour_item.temp for hour_item in weather.hourly][:FORECAST_HOURS_COUNT]
+
+    # Create figures
+    fig, ax = plt.subplots(figsize=[FIG_WIDTH_INCHES, FIG_HEIGHT_INCHES])
+
+    ax.grid(axis="y")  # removes vertical lines
+
+    # Remove outlines
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+
+    # X axis
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval = 1))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H'))
+
+    temp_points, = ax.plot(dates[:FORECAST_HOURS_COUNT], temperatures, color="black", marker="o")
+
+    # Y axis
+    ax.set_ylabel(f'{chr(176)}C', rotation=0, loc="top")
+    ax.yaxis.set_label_coords(-0.08, 0.98)
+
+    # Setting y max/min label value always bigger/smaller than min/max temperature value
+    y_ticks = ax.get_yticks()
+    tick_diff = y_ticks[1] - y_ticks[0]
+    if y_ticks[-1] < max(temperatures): y_ticks.append(y_ticks[-1] + tick_diff)
+    if y_ticks[0] > min(temperatures): y_ticks.insert(0, y_ticks[-1] - tick_diff)
+    ax.set_yticks(y_ticks)
+
+    ax.set_ylim(bottom=y_ticks[0] - 0.1, top=y_ticks[-1] + 0.1)  # set y-axis limits always bigger/smaller than label value
+
+    plt.rcParams['axes.autolimit_mode'] = 'round_numbers'
+
+    # Save to in-memory bufor
+    img_buf = io.BytesIO()
+    fig.savefig(img_buf, format='png', dpi=fig.dpi)
+
+    plot_image = Image.open(img_buf)  # Open plot as image from memory
+    main_image.paste(plot_image, box=(301, 1))  # plot paste to main_image
 
 
     # Image save and show
