@@ -31,6 +31,9 @@ def main():
     date_font = ImageFont.truetype("arial.ttf", 14)
     font = ImageFont.truetype("arial.ttf", 24)
     add_info_font = ImageFont.truetype("arial.ttf", 16)
+    daily_info_days_font = ImageFont.truetype("arialbd.ttf", 24)
+    daily_info_font = ImageFont.truetype("arial.ttf", 24)
+    daily_info_small_font = ImageFont.truetype("arial.ttf", 14)
 
     # Getting weather from API
     ow = wlib.OpenWeather(API_KEY, 'metric', 'pl', LATITUDE, LONGITUDE)
@@ -107,6 +110,58 @@ def main():
             val = round(element['value'], 1)
             draw.text((ADD_INFO_X_POS + 25 + ADD_INFO_X_SPACE * col_no, ADD_INFO_Y_POS + ADD_INFO_Y_SPACE * row_no), 
                       str(val) + element['unit'], font=add_info_font, fill=1)
+            
+
+    ### DAILY FORECAST ###
+
+    WEEKDAY_NAMES = ["Pon", "Wt", "Śr", "Czw", "Pt", "Sob", "Nie"]
+    Y_START_POS = 260
+    Y_SPACE = 30
+
+    # Icons
+    icon_image = Image.open('./images/temp_day.png')
+    icon_image = transparency_to_white(icon_image)  
+    main_image.paste(icon_image, box=(80, 230))
+
+    icon_image = Image.open('./images/temp_night.png')
+    icon_image = transparency_to_white(icon_image)  
+    main_image.paste(icon_image, box=(135, 230))
+
+    icon_image = Image.open('./images/rain.png')
+    icon_image = transparency_to_white(icon_image)  
+    main_image.paste(icon_image, box=(250, 230))
+
+    # Days
+    for index, day_wthr in enumerate(weather.daily[:7]):
+
+        # Day name
+        weekday = 'Dziś' if index == 0 else WEEKDAY_NAMES[day_wthr.dt_dt.weekday()]
+        draw.text((15, Y_START_POS + index * Y_SPACE), f'{weekday}', font=daily_info_days_font)
+
+        # Day temperature
+        temp_day = int(round(day_wthr.temp.get('day', '-'), 0))
+        text_1 = str(temp_day)
+        x_pos_1 = 95 - draw.textlength(text_1, daily_info_font) / 2
+        draw.text((x_pos_1, Y_START_POS + index * Y_SPACE), text_1, font=daily_info_font)
+
+        # Night temperature
+        temp_night = int(round(day_wthr.temp.get('night', '-'), 0))
+        text_2 = str(temp_night)
+        x_pos_2 = 150 - draw.textlength(text_2, daily_info_font) / 2
+        draw.text((x_pos_2, Y_START_POS + index * Y_SPACE), text_2, font=daily_info_font)
+
+        # Icon
+        icon_image = Image.open(day_wthr.weather.get_icon_image(save=True)).resize((35,) * 2)
+        icon_image = transparency_to_white(icon_image)  # use when resized and white background (resizing changes transparency to black)
+        main_image.paste(icon_image, box=(195, -5 + Y_START_POS + index * Y_SPACE))
+
+        # Rain / snow
+        rain = day_wthr.rain or 0
+        snow = day_wthr.snow or 0
+        precip = round(rain + snow, 1) or ''
+        text_3 = str(precip)
+        x_pos_3 = 265 - draw.textlength(text_3, daily_info_small_font) / 2
+        draw.text((x_pos_3, 5 + Y_START_POS + index * Y_SPACE), text_3, font=daily_info_small_font)
 
 
     # Image save and show
