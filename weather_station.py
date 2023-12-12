@@ -277,13 +277,15 @@ def main():
     fig.figimage(sunset_icon, xo=x_sunset_pix_pos - center_offs, yo=y_pix_pos)
 
     # Add sunrise time
-    ax.text(*(ax.transData.inverted().transform((x_sunrise_pix_pos + center_offs, y_pix_pos + 5))),  f'({sunrise_time.strftime('%H:%M')})',
+    sunrise_time_str = sunrise_time.strftime('%H:%M')
+    ax.text(*(ax.transData.inverted().transform((x_sunrise_pix_pos + center_offs, y_pix_pos + 5))),  f'({sunrise_time_str})',
         verticalalignment='bottom', horizontalalignment='left',
         transform=ax.transData,
         color='black', fontsize=9)
 
     # Add sunset time
-    ax.text(*(ax.transData.inverted().transform((x_sunset_pix_pos + center_offs, y_pix_pos + 5))),  f'({sunset_time.strftime('%H:%M')})',
+    sunset_time_str = sunset_time.strftime('%H:%M')
+    ax.text(*(ax.transData.inverted().transform((x_sunset_pix_pos + center_offs, y_pix_pos + 5))),  f'({sunset_time_str})',
         verticalalignment='bottom', horizontalalignment='left',
         transform=ax.transData,
         color='black', fontsize=9)
