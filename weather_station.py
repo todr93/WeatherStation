@@ -277,18 +277,28 @@ def main():
     fig.figimage(sunset_icon, xo=x_sunset_pix_pos - center_offs, yo=y_pix_pos)
 
     # Add sunrise time
-    sunrise_time_str = sunrise_time.strftime('%H:%M')
-    ax.text(*(ax.transData.inverted().transform((x_sunrise_pix_pos + center_offs, y_pix_pos + 5))),  f'({sunrise_time_str})',
-        verticalalignment='bottom', horizontalalignment='left',
-        transform=ax.transData,
-        color='black', fontsize=9)
+    if dates[0] < sunrise_time < dates[-1]:
+        sunrise_time_str = sunrise_time.strftime('%H:%M')
+        if sunrise_time < dates[-3]:
+            sunrise_time_pos = (x_sunrise_pix_pos + center_offs, y_pix_pos + 5)
+        else:
+            sunrise_time_pos = (x_sunrise_pix_pos - 60, y_pix_pos + 5)  # text on the left
+        ax.text(*(ax.transData.inverted().transform(sunrise_time_pos)),  f'({sunrise_time_str})',
+            verticalalignment='bottom', horizontalalignment='left',
+            transform=ax.transData,
+            color='black', fontsize=9)
 
     # Add sunset time
-    sunset_time_str = sunset_time.strftime('%H:%M')
-    ax.text(*(ax.transData.inverted().transform((x_sunset_pix_pos + center_offs, y_pix_pos + 5))),  f'({sunset_time_str})',
-        verticalalignment='bottom', horizontalalignment='left',
-        transform=ax.transData,
-        color='black', fontsize=9)
+    if dates[0] < sunset_time < dates[-1]:
+        sunset_time_str = sunset_time.strftime('%H:%M')
+        if sunset_time < dates[-3]:
+            sunset_time_pos = (x_sunset_pix_pos + center_offs, y_pix_pos + 5)
+        else:
+            sunset_time_pos = (x_sunset_pix_pos - 60, y_pix_pos + 5)  # text on the left
+        ax.text(*(ax.transData.inverted().transform(sunset_time_pos)),  f'({sunset_time_str})',
+            verticalalignment='bottom', horizontalalignment='left',
+            transform=ax.transData,
+            color='black', fontsize=9)
 
 
     # Save to in-memory bufor
