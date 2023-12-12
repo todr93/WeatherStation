@@ -30,7 +30,7 @@ def main():
     LONGITUDE = 19.8799902
 
     # Fonts definitions
-    FONTS_DIR = ".\\fonts"
+    FONTS_DIR = "./fonts"
     curr_temp_font = ImageFont.truetype(os.path.join(FONTS_DIR, "Arimo-Bold.ttf"), 48)
     curr_temp_small_font = ImageFont.truetype(os.path.join(FONTS_DIR, "Arimo-Bold.ttf"), 32)
     date_font = ImageFont.truetype(os.path.join(FONTS_DIR, "Arimo-Regular.ttf"), 14)
