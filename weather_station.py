@@ -5,6 +5,7 @@ import datetime
 import io
 from matplotlib import pyplot as plt
 from matplotlib import dates as mdates
+import os
 
 import weather as wlib
 
@@ -29,14 +30,15 @@ def main():
     LONGITUDE = 19.8799902
 
     # Fonts definitions
-    curr_temp_font = ImageFont.truetype("arialbd.ttf", 48)
-    curr_temp_small_font = ImageFont.truetype("arialbd.ttf", 32)
-    date_font = ImageFont.truetype("arial.ttf", 14)
-    font = ImageFont.truetype("arial.ttf", 24)
-    add_info_font = ImageFont.truetype("arial.ttf", 16)
-    daily_info_days_font = ImageFont.truetype("arialbd.ttf", 24)
-    daily_info_font = ImageFont.truetype("arial.ttf", 24)
-    daily_info_small_font = ImageFont.truetype("arial.ttf", 14)
+    FONTS_DIR = ".\\fonts"
+    curr_temp_font = ImageFont.truetype(os.path.join(FONTS_DIR, "Arimo-Bold.ttf"), 48)
+    curr_temp_small_font = ImageFont.truetype(os.path.join(FONTS_DIR, "Arimo-Bold.ttf"), 32)
+    date_font = ImageFont.truetype(os.path.join(FONTS_DIR, "Arimo-Regular.ttf"), 14)
+    font = ImageFont.truetype(os.path.join(FONTS_DIR, "Arimo-Regular.ttf"), 24)
+    add_info_font = ImageFont.truetype(os.path.join(FONTS_DIR, "Arimo-Regular.ttf"), 16)
+    daily_info_days_font = ImageFont.truetype(os.path.join(FONTS_DIR, "Arimo-Bold.ttf"), 24)
+    daily_info_font = ImageFont.truetype(os.path.join(FONTS_DIR, "Arimo-Regular.ttf"), 24)
+    daily_info_small_font = ImageFont.truetype(os.path.join(FONTS_DIR, "Arimo-Regular.ttf"), 14)
 
     # Getting weather from API
     ow = wlib.OpenWeather(API_KEY, 'metric', 'pl', LATITUDE, LONGITUDE)
