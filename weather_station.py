@@ -6,6 +6,7 @@ import io
 from matplotlib import pyplot as plt
 from matplotlib import dates as mdates
 import os
+import sys
 
 import weather as wlib
 
@@ -19,7 +20,7 @@ def transparency_to_white(image):
         return image
 
 
-def main():
+def main(mode="test"):
     # Main screen parameters
     SCREEN_HEIGHT = 480
     SCREEN_WIDTH = 800
@@ -310,10 +311,30 @@ def main():
     plot_image = Image.open(img_buf)  # Open plot as image from memory
     main_image.paste(plot_image, box=(301, 1))  # plot paste to main_image
 
+    if mode == "test":
+        # Image save and show
+        main_image.save("result_image.bmp")
+        main_image.show(title="WeatherStation")
 
-    # Image save and show
-    main_image.save("result_image.bmp")
-    main_image.show(title="WeatherStation")
+    elif mode == "screen":
+        # Image display on the screen
+        from waveshare_epd import epd7in5_V2
+        
+        epd = epd7in5_V2.EPD()
+
+        epd.init()
+        epd.Clear()
+        epd.display(epd.getbuffer(main_image))
+        epd.sleep()
+
 
 if __name__ == "__main__":
-    main()
+    modes = ["test", "screen"]
+
+    if len(sys.argv) > 1:
+        if sys.argv[1] in modes:
+            main(mode=sys.argv[1])
+        else:
+            print(f"Possible modes are: {modes}")
+    else:
+        main()
