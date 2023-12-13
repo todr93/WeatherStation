@@ -277,12 +277,10 @@ def main(mode="test"):
     x_sunset_pix_pos, _ = ax.transData.transform((mdates.date2num(sunset_time), 0))
     y_pix_pos = y_sunrise_pix_pos - 5
 
-    # Insert icons
-    fig.figimage(sunrise_icon, xo=x_sunrise_pix_pos - center_offs, yo=y_pix_pos)
-    fig.figimage(sunset_icon, xo=x_sunset_pix_pos - center_offs, yo=y_pix_pos)
-
     # Add sunrise time
     if dates[0] < sunrise_time < dates[-1]:
+        fig.figimage(sunrise_icon, xo=x_sunrise_pix_pos - center_offs, yo=y_pix_pos)  # insert icon
+
         sunrise_time_str = sunrise_time.strftime('%H:%M')
         if sunrise_time < dates[-3]:
             sunrise_time_pos = (x_sunrise_pix_pos + center_offs, y_pix_pos + 5)
@@ -295,6 +293,8 @@ def main(mode="test"):
 
     # Add sunset time
     if dates[0] < sunset_time < dates[-1]:
+        fig.figimage(sunset_icon, xo=x_sunset_pix_pos - center_offs, yo=y_pix_pos)  # insert icon
+
         sunset_time_str = sunset_time.strftime('%H:%M')
         if sunset_time < dates[-3]:
             sunset_time_pos = (x_sunset_pix_pos + center_offs, y_pix_pos + 5)
