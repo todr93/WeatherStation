@@ -30,16 +30,18 @@ def main(mode="test"):
     LATITUDE = 50.0142814
     LONGITUDE = 19.8799902
 
+    base_dir = os.path.dirname(__file__)
+
     # Fonts definitions
-    FONTS_DIR = "./fonts"
-    curr_temp_font = ImageFont.truetype(os.path.join(FONTS_DIR, "Arimo-Bold.ttf"), 48)
-    curr_temp_small_font = ImageFont.truetype(os.path.join(FONTS_DIR, "Arimo-Bold.ttf"), 32)
-    date_font = ImageFont.truetype(os.path.join(FONTS_DIR, "Arimo-Regular.ttf"), 14)
-    font = ImageFont.truetype(os.path.join(FONTS_DIR, "Arimo-Regular.ttf"), 24)
-    add_info_font = ImageFont.truetype(os.path.join(FONTS_DIR, "Arimo-Regular.ttf"), 16)
-    daily_info_days_font = ImageFont.truetype(os.path.join(FONTS_DIR, "Arimo-Bold.ttf"), 24)
-    daily_info_font = ImageFont.truetype(os.path.join(FONTS_DIR, "Arimo-Regular.ttf"), 24)
-    daily_info_small_font = ImageFont.truetype(os.path.join(FONTS_DIR, "Arimo-Regular.ttf"), 14)
+    fonts_dir = os.path.join(base_dir, 'fonts')
+    curr_temp_font = ImageFont.truetype(os.path.join(fonts_dir, "Arimo-Bold.ttf"), 48)
+    curr_temp_small_font = ImageFont.truetype(os.path.join(fonts_dir, "Arimo-Bold.ttf"), 32)
+    date_font = ImageFont.truetype(os.path.join(fonts_dir, "Arimo-Regular.ttf"), 14)
+    font = ImageFont.truetype(os.path.join(fonts_dir, "Arimo-Regular.ttf"), 24)
+    add_info_font = ImageFont.truetype(os.path.join(fonts_dir, "Arimo-Regular.ttf"), 16)
+    daily_info_days_font = ImageFont.truetype(os.path.join(fonts_dir, "Arimo-Bold.ttf"), 24)
+    daily_info_font = ImageFont.truetype(os.path.join(fonts_dir, "Arimo-Regular.ttf"), 24)
+    daily_info_small_font = ImageFont.truetype(os.path.join(fonts_dir, "Arimo-Regular.ttf"), 14)
 
     # Getting weather from API
     ow = wlib.OpenWeather(API_KEY, 'metric', 'pl', LATITUDE, LONGITUDE)
@@ -94,13 +96,13 @@ def main(mode="test"):
 
     info_element = [
         [
-            {'icon': "./images/precip.png", 'value': rain + snow, 'unit': " mm/h"},
-            {'icon': "./images/cloud.png", 'value': weather.current.clouds, 'unit': " %"},
-            {'icon': "./images/pressure.png", 'value': weather.current.pressure, 'unit': " hPa"},
+            {'icon': os.path.join(base_dir, 'images/precip.png'), 'value': rain + snow, 'unit': " mm/h"},
+            {'icon': os.path.join(base_dir, 'images/cloud.png'), 'value': weather.current.clouds, 'unit': " %"},
+            {'icon': os.path.join(base_dir, 'images/pressure.png'), 'value': weather.current.pressure, 'unit': " hPa"},
         ],
         [
-            {'icon': "./images/wind.png", 'value': weather.current.wind_speed, 'unit': " m/s"},
-            {'icon': "./images/humidity.png", 'value': weather.current.humidity, 'unit': " %"},
+            {'icon': os.path.join(base_dir, 'images/wind.png'), 'value': weather.current.wind_speed, 'unit': " m/s"},
+            {'icon': os.path.join(base_dir, 'images/humidity.png'), 'value': weather.current.humidity, 'unit': " %"},
         ]
     ]
     for col_no, column in enumerate(info_element):
@@ -125,15 +127,15 @@ def main(mode="test"):
     Y_SPACE = 30
 
     # Icons
-    icon_image = Image.open('./images/temp_day.png')
+    icon_image = Image.open(os.path.join(base_dir, 'images/temp_day.png'))
     icon_image = transparency_to_white(icon_image)  
     main_image.paste(icon_image, box=(80, 230))
 
-    icon_image = Image.open('./images/temp_night.png')
+    icon_image = Image.open(os.path.join(base_dir, 'images/temp_night.png'))
     icon_image = transparency_to_white(icon_image)  
     main_image.paste(icon_image, box=(135, 230))
 
-    icon_image = Image.open('./images/rain.png')
+    icon_image = Image.open(os.path.join(base_dir, 'images/rain.png'))
     icon_image = transparency_to_white(icon_image)  
     main_image.paste(icon_image, box=(250, 230))
 
@@ -253,8 +255,8 @@ def main(mode="test"):
     # Add sunrise / sunset icons
     ICON_SIZE = 30
     center_offs = ICON_SIZE / 2
-    sunrise_icon = Image.open('./images/sunrise.png').resize((ICON_SIZE,) * 2)
-    sunset_icon = Image.open('./images/sunset.png').resize((ICON_SIZE,) * 2)
+    sunrise_icon = Image.open(os.path.join(base_dir, 'images/sunrise.png')).resize((ICON_SIZE,) * 2)
+    sunset_icon = Image.open(os.path.join(base_dir, 'images/sunset.png')).resize((ICON_SIZE,) * 2)
 
     # Get the x and y data and transform it into pixel coordinates
     x, y = temp_points.get_data()

@@ -114,7 +114,7 @@ class Weather(WeatherData):
         '''Returns icon image'''
 
         # Check if local file exists
-        local_path = f'./images/new/{self.icon}.png'
+        local_path = os.path.join(os.path.dirname(__file__), f'images/new/{self.icon}.png')
         if os.path.exists(local_path):
             return open(local_path, 'rb')
         else:
