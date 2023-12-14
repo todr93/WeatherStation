@@ -7,17 +7,37 @@ from matplotlib import pyplot as plt
 from matplotlib import dates as mdates
 import os
 import sys
+import random
 
 import weather as wlib
 
 
 def transparency_to_white(image):
+    ''' Changes transparency in PNG file to white color '''
+
     if image.mode == 'RGBA':
         alpha = image.split()[3]
         bgmask = alpha.point(lambda x: 255-x)
         image = image.convert('RGB')
         image.paste((255,255,255), None, bgmask)
         return image
+    
+
+def get_photo_path(dir_path: str) -> str:
+    ''' Returns path of the random photo to display '''
+    
+    if not os.path.exists(dir_path):
+        return None
+
+    # Get all graphic files in the directory
+    all_files = [os.path.join(dir_path, f) for f in os.listdir(dir_path) if os.path.isfile(os.path.join(dir_path, f)) and f[-4:] in [".bmp", ".jpg", ".png"]]
+
+    if not all_files:
+        return None
+
+    random_file = random.choice(all_files)
+
+    return os.path.join(dir_path, random_file)
 
 
 def main(mode="test"):
@@ -306,6 +326,15 @@ def main(mode="test"):
             color='black', fontsize=9)
 
 
+    ### PHOTO FRAME ###
+
+    photo_dir = os.path.join(base_dir, "photos")
+    photo_path = get_photo_path(photo_dir)
+    if photo_path:
+        photo_image = Image.open(photo_path)
+        main_image.paste(photo_image, box=(390, 240))
+
+
     # Save to in-memory bufor
     img_buf = io.BytesIO()
     fig.savefig(img_buf, format='png', dpi=fig.dpi)
@@ -313,6 +342,8 @@ def main(mode="test"):
     plot_image = Image.open(img_buf)  # Open plot as image from memory
     main_image.paste(plot_image, box=(301, 1))  # plot paste to main_image
 
+
+    # Display image or send to the screen
     if mode == "test":
         # Image save and show
         main_image.save("result_image.bmp")
