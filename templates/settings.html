@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block header %} Ustawienia stacji pogodowej {% endblock %}
+
+{% block content %}
+<ul>
+    <li>Ustawienie 1</li>
+    <li>Ustawienie 2</li>
+</ul>
+
+<form method="POST" action="/settings">
+    <button type="submit">Aktualizuj ekran e-Ink</button>
+</form>
+{% endblock %}
