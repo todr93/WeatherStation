@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block header %} Zdjęcia {% endblock %}
+
+{% block content %}
+<div>
+    {% for photo in data.photos %}
+    <img src="{{ url_for('send_photo', filename=photo) }}" class="img-fluid">
+    {% endfor %}
+</div>
+
+
+{% endblock %}
