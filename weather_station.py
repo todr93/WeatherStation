@@ -343,7 +343,7 @@ def main(mode="no-screen"):
     main_image.paste(plot_image, box=(301, 1))  # plot paste to main_image
 
     
-    main_image.save("result_image.bmp")
+    main_image.save(os.path.join(base_dir, 'result_image.bmp'))
 
     # Display image or send to the screen
     if mode == "test":
