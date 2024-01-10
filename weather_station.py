@@ -40,7 +40,7 @@ def get_photo_path(dir_path: str) -> str:
     return os.path.join(dir_path, random_file)
 
 
-def main(mode="test"):
+def main(mode="no-screen"):
     # Main screen parameters
     SCREEN_HEIGHT = 480
     SCREEN_WIDTH = 800
@@ -342,11 +342,11 @@ def main(mode="test"):
     plot_image = Image.open(img_buf)  # Open plot as image from memory
     main_image.paste(plot_image, box=(301, 1))  # plot paste to main_image
 
+    
+    main_image.save("result_image.bmp")
 
     # Display image or send to the screen
     if mode == "test":
-        # Image save and show
-        main_image.save("result_image.bmp")
         main_image.show(title="WeatherStation")
 
     elif mode == "screen":
@@ -362,7 +362,7 @@ def main(mode="test"):
 
 
 if __name__ == "__main__":
-    modes = ["test", "screen"]
+    modes = ["test", "screen", "no-screen"]
 
     if len(sys.argv) > 1:
         if sys.argv[1] in modes:

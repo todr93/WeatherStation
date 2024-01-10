@@ -31,9 +31,15 @@ def photos_view():
 
     return render_template('photos.html', data=data)
 
+
 @app.route('/photos/<path:filename>')
 def send_photo(filename):
     return send_from_directory('photos', filename, as_attachment=True)
+
+
+@app.route('/result_image.bmp')
+def send_result_image():
+    return send_from_directory('.', 'result_image.bmp', as_attachment=True)
 
 
 if __name__ == '__main__':

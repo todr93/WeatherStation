@@ -3,7 +3,9 @@
 {% block header %} Stacja pogodowa {% endblock %}
 
 {% block content %}
-
-Zawartość testowa
+Podgląd
+<div>
+    <img src="{{url_for('send_result_image')}}" class="img-fluid">
+</div>
 
 {% endblock %}
