@@ -3,11 +3,28 @@
 {% block header %} Zdjęcia {% endblock %}
 
 {% block content %}
-<div>
+<div id="photo-container" class="m-3">
     {% for photo in data.photos %}
     <img src="{{ url_for('send_photo', filename=photo) }}" class="img-fluid">
     {% endfor %}
 </div>
-
+<div id="new-photo-container">
+    <form method="POST" enctype="multipart/form-data">
+        {{ data.new_photo_form.csrf_token }}
+        <div class="row g-2">
+            <div class="col-sm">
+                {{ data.new_photo_form.file(class_="form-control") }}
+                <div class="invalid-feedback d-block">
+                    {% for error in data.new_photo_form.file.errors %}
+                    {{ error }} <br>
+                    {% endfor %}
+                </div>
+            </form>
+            </div>
+            <div class="col-sm">
+                <button type="submit" class="btn btn-primary">Prześlij</button>
+            </div>
+        </div>
+</div>
 
 {% endblock %}

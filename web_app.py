@@ -2,10 +2,28 @@ from flask import Flask
 from flask import render_template
 from flask import request
 from flask import send_from_directory
+from flask_wtf import FlaskForm
+from flask_wtf.file import FileRequired, FileAllowed
+from wtforms import FileField, validators, ValidationError, StringField
+from PIL import Image
+import re
 import os
 import weather_station
 
 app = Flask('weather')
+app.config['SECRET_KEY'] = os.urandom(24)
+
+
+class NewPhotoForm(FlaskForm):
+    file = FileField('Plik obrazu', validators=[FileRequired()])
+
+    @staticmethod
+    def validate_file(form, field):
+        if not re.match(r'.+\.(jpg|jpeg|bmp|png|tiff)', field.data.filename):
+            raise ValidationError('Dozwolone typy plików to: jpg, bmp, tiff i png')
+        else:
+            return True
+
 
 @app.route('/')
 def home_view():
@@ -19,14 +37,26 @@ def settings_view():
 
     return render_template('settings.html')
 
-@app.route('/photos')
+@app.route('/photos', methods=['GET', 'POST'])
 def photos_view():
+    new_photo_form = NewPhotoForm()
+    photo_dir = os.path.join(os.path.curdir, 'photos')
+
+    if request.method == 'POST':
+        if new_photo_form.validate_on_submit() == True:
+            file = new_photo_form.data['file']
+            img = Image.open(file)
+            new_height = 240
+            new_width = int(round(img.size[0] * 240 / img.size[1]))
+            img = img.resize((new_width, new_height))
+            img.save(os.path.join(photo_dir, file.filename))
+
     # Find all files in photos dir
-    dir = os.path.join(os.path.curdir, 'photos')
-    photos = [filename for filename in os.listdir(dir)]
+    photos = [filename for filename in os.listdir(photo_dir)]
 
     data = {
         'photos': photos,
+        'new_photo_form': new_photo_form,
     }
 
     return render_template('photos.html', data=data)
