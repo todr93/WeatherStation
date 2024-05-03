@@ -3,11 +3,23 @@
 {% block header %} Zdjęcia {% endblock %}
 
 {% block content %}
+
 <div id="photo-container" class="m-3">
     {% for photo in data.photos %}
-    <img src="{{ url_for('send_photo', filename=photo) }}" class="img-fluid">
+    <div class="d-inline-block position-relative">
+        <!-- Delete button -->
+        <button onclick="sendRemoveForm('{{photo}}')" class="position-absolute bg-transparent border-0" style="top: 10px; right: 10px; z-index: 10;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-trash" viewBox="0 0 16 16">
+                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+            </svg>
+        </button>
+          <!-- Image -->
+        <img src="{{ url_for('send_photo', filename=photo) }}" class="img-fluid" filename="{{ photo }}">
+    </div>
     {% endfor %}
 </div>
+
 <div id="new-photo-container">
     <form method="POST" enctype="multipart/form-data">
         {{ data.new_photo_form.csrf_token }}
@@ -22,9 +34,25 @@
             </form>
             </div>
             <div class="col-sm">
-                <button type="submit" class="btn btn-primary">Prześlij</button>
+                <button type="submit" name="new-photo-form" class="btn btn-primary">Prześlij</button>
             </div>
         </div>
 </div>
+<form method="POST" id="remove-photo-form" name="remove-photo-form" hidden>
+    {{ data.remove_photo_form.file_name() }}
+    <button type="submit" id="remove-submit-button" name="remove-photo-form"></button>
+</form>
+
+
+<script>
+    function sendRemoveForm(path) {
+        console.log(path);
+        form = document.getElementById('remove-photo-form');
+        fileNameElement = document.getElementById('file_name');
+        btn = document.getElementById('remove-submit-button');
+        fileNameElement.value = path;
+        btn.click();
+    }
+</script>
 
 {% endblock %}
