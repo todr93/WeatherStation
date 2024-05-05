@@ -6,6 +6,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileRequired, FileAllowed
 from wtforms import FileField, validators, ValidationError, StringField
 from PIL import Image
+import json
 import re
 import os
 import weather_station
@@ -47,6 +48,15 @@ def photos_view():
     remove_photo_form = RemovePhotoForm()
 
     photo_dir = os.path.join(os.path.curdir, 'photos')
+    ACTIVE_IMG_FILENAME = 'active_images.json'
+
+    # Read active images
+    active_imgs_path = os.path.join(photo_dir, ACTIVE_IMG_FILENAME)
+    if os.path.exists(active_imgs_path):
+        with open(active_imgs_path) as file:
+            active_images = json.load(file)
+    else:
+        active_images = []
 
     if request.method == 'POST':
         if 'new-photo-form' in request.form and new_photo_form.validate_on_submit():
@@ -56,18 +66,32 @@ def photos_view():
             new_width = int(round(img.size[0] * 240 / img.size[1]))
             img = img.resize((new_width, new_height))
             img.save(os.path.join(photo_dir, file.filename))
+            if file.filename not in active_images: active_images.append(file.filename)
 
         if 'remove-photo-form' in request.form:
             file_name = remove_photo_form.data['file_name']
             file_path = os.path.join(photo_dir, file_name)
             if os.path.exists(file_path):
                 os.remove(file_path)
+                if file_name in active_images: active_images.remove(file_name)
+
+        if 'activation-image' in request.form:
+            img_name = request.form['image_name']
+            if 'active' in request.form:
+                active_images.append(img_name)
+            else:
+                if img_name in active_images: active_images.remove(img_name)
+
+        # Save active images
+        with open(os.path.join(photo_dir, ACTIVE_IMG_FILENAME), 'w') as file:
+            file.write(json.dumps(active_images))
 
     # Find all files in photos dir
-    photos = [filename for filename in os.listdir(photo_dir)]
+    photos = [filename for filename in os.listdir(photo_dir) if filename != ACTIVE_IMG_FILENAME]
 
     data = {
         'photos': photos,
+        'active_images': active_images,
         'new_photo_form': new_photo_form,
         'remove_photo_form': remove_photo_form,
     }

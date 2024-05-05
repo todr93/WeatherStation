@@ -162,3 +162,4 @@ cython_debug/
 # This project
 result_image.bmp
 *.code-workspace
+photos/active_images.json

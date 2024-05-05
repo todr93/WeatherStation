@@ -8,6 +8,7 @@ from matplotlib import dates as mdates
 import os
 import sys
 import random
+import json
 
 import weather as wlib
 
@@ -31,7 +32,14 @@ def get_photo_path(dir_path: str) -> str:
 
     # Get all graphic files in the directory
     all_files = [os.path.join(dir_path, f) for f in os.listdir(dir_path) if os.path.isfile(os.path.join(dir_path, f)) and f[-4:] in [".bmp", ".jpg", ".png"]]
-
+    
+    # Get active images from file
+    active_imgs_path = os.path.join(dir_path, 'active_images.json')
+    if os.path.exists(active_imgs_path):
+        with open(active_imgs_path) as active_file:
+            active_images = json.load(active_file)
+        all_files = [file for file in all_files if os.path.basename(file) in active_images]
+        
     if not all_files:
         return None
 
