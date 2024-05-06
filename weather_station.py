@@ -335,13 +335,11 @@ def main(mode="no-screen"):
 
 
     ### PHOTO FRAME ###
-
     photo_dir = os.path.join(base_dir, "photos")
     photo_path = get_photo_path(photo_dir)
     if photo_path:
         photo_image = Image.open(photo_path)
-        main_image.paste(photo_image, box=(390, 240))
-
+        main_image.paste(photo_image, box=(550 - round(photo_image.size[0] / 2), 240))
 
     # Save to in-memory bufor
     img_buf = io.BytesIO()
@@ -350,7 +348,6 @@ def main(mode="no-screen"):
     plot_image = Image.open(img_buf)  # Open plot as image from memory
     main_image.paste(plot_image, box=(301, 1))  # plot paste to main_image
 
-    
     main_image.save(os.path.join(base_dir, 'result_image.bmp'))
 
     # Display image or send to the screen
