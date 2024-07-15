@@ -38,7 +38,11 @@ def home_view():
 @app.route('/settings', methods=['GET', 'POST'])
 def settings_view():
     if request.method == 'POST':
-        weather_station.main('screen')
+        data = request.form
+        if "update" in data:
+            weather_station.main('screen')
+        elif "clear" in data:
+            weather_station.main("clear")
 
     return render_template('settings.html')
 

@@ -8,7 +8,15 @@
     <li>Ustawienie 2</li>
 </ul>
 
+<!-- Update form -->
 <form method="POST" action="/settings">
+    <input type="hidden" name="update">
     <button type="submit">Aktualizuj ekran e-Ink</button>
+</form>
+
+<!-- Clear form -->
+<form method="POST" action="/settings">
+    <input type="hidden" name="clear">
+    <button type="submit">Wyczyść ekran e-Ink</button>
 </form>
 {% endblock %}

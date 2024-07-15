@@ -365,6 +365,11 @@ def main(mode="no-screen"):
         epd.display(epd.getbuffer(main_image))
         epd.sleep()
 
+    elif mode == "clear":
+        epd.init()
+        epd.Clear()
+        epd.sleep()
+
 
 if __name__ == "__main__":
     modes = ["test", "screen", "no-screen"]
