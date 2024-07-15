@@ -163,3 +163,8 @@ cython_debug/
 result_image.bmp
 *.code-workspace
 photos/active_images.json
+
+photos/
+!photos/demo_foto1.bmp
+!photos/demo_foto2.bmp
+!photos/demo_foto3.bmp
