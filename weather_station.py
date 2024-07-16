@@ -48,8 +48,8 @@ def get_photo_path(dir_path: str) -> str:
     return os.path.join(dir_path, random_file)
 
 
-def main(mode="no-screen"):
-    # Main screen parameters
+def prepare_image():
+        # Main screen parameters
     SCREEN_HEIGHT = 480
     SCREEN_WIDTH = 800
 
@@ -350,19 +350,26 @@ def main(mode="no-screen"):
 
     main_image.save(os.path.join(base_dir, 'result_image.bmp'))
 
+    return main_image
+
+
+def main(mode="no-screen"):
+    from waveshare_epd import epd7in5_V2
+        
+    epd = epd7in5_V2.EPD()
+    
     # Display image or send to the screen
     if mode == "test":
-        main_image.show(title="WeatherStation")
+        image = prepare_image()
+        image.show(title="WeatherStation")
 
     elif mode == "screen":
         # Image display on the screen
-        from waveshare_epd import epd7in5_V2
-        
-        epd = epd7in5_V2.EPD()
 
+        image = prepare_image()
         epd.init()
         epd.Clear()
-        epd.display(epd.getbuffer(main_image))
+        epd.display(epd.getbuffer(image))
         epd.sleep()
 
     elif mode == "clear":
@@ -372,7 +379,7 @@ def main(mode="no-screen"):
 
 
 if __name__ == "__main__":
-    modes = ["test", "screen", "no-screen"]
+    modes = ["test", "screen", "no-screen", "clear"]
 
     if len(sys.argv) > 1:
         if sys.argv[1] in modes:
