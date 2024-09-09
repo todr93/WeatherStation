@@ -9,6 +9,7 @@
         <div class="d-inline-block position-relative">
             <!-- Activation checkbox -->
             <form method="POST">
+                <input name="activation-image" hidden>
                 <input name="image_name" value="{{ photo }}" hidden>
                 <input type="checkbox" name="active" onchange="changeActivation(this)" class="form-check-input position-absolute success" {% if photo in data.active_images %} checked {% endif %}
                         style="top: 10px; left: 10px; z-index: 10;">
@@ -64,6 +65,19 @@
     function changeActivation(element) {
         let form = element.parentElement;
         let button = form.querySelector('#change-active-button');
+
+        // Send request without refreshing page
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(form)
+            fetch(document.location.pathname, {
+                method: 'POST',
+                body: formData,
+            }).then(function(response) {
+                // DO NOTHING
+            });
+        });
+
         button.click();
     }
 </script>
