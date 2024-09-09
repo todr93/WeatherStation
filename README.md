@@ -8,6 +8,12 @@ All required modules are in requirements.txt file.
 
 Application (screen mode) is created for Waveshare 7.5inch E-Ink (800×480) display.
 
+### .env file
+Some data (e.g. API key) needs to be stored in `.env` file.
+```
+API_KEY=<your-open-weather-API-key>
+```
+
 ## Usage
 It can be used in two modes:
 - screen mode with RaspberryPi and e-Paper screen, 

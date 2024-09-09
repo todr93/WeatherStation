@@ -9,6 +9,7 @@ import os
 import sys
 import random
 import json
+from dotenv import load_dotenv
 
 import weather as wlib
 
@@ -49,12 +50,15 @@ def get_photo_path(dir_path: str) -> str:
 
 
 def prepare_image():
-        # Main screen parameters
+    # Main screen parameters
     SCREEN_HEIGHT = 480
     SCREEN_WIDTH = 800
 
+    # Load environmental variables
+    load_dotenv()
+
     # Data for API
-    API_KEY = '87f6be3be5756aab9f29044694dfbdad'
+    API_KEY = os.getenv("API_KEY")
     LATITUDE = 50.0142814
     LONGITUDE = 19.8799902
 
