@@ -5,6 +5,13 @@
 {% block content %}
 
 <div id="photo-container" class="m-3">
+
+        <!-- Active/Deactive all -->
+        <form method="POST">
+            <input type="submit" name="active-all" class="btn btn-outline-dark" value="Zaznacz wszystko">
+            <input type="submit" name="deactive-all" class="btn btn-outline-dark" value="Odznacz wszystko">
+        </form><br>
+
         {% for photo in data.photos %}
         <div class="d-inline-block position-relative">
             <!-- Activation checkbox -->

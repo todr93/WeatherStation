@@ -86,6 +86,12 @@ def photos_view():
             else:
                 if img_name in active_images: active_images.remove(img_name)
 
+        if 'active-all' in request.form:
+            active_images = [file for file in os.listdir(photo_dir) if not ".json" in file]
+
+        if 'deactive-all' in request.form:
+            active_images = []
+
         # Save active images
         with open(os.path.join(photo_dir, ACTIVE_IMG_FILENAME), 'w') as file:
             file.write(json.dumps(active_images))
