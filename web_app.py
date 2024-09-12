@@ -9,7 +9,8 @@ from PIL import Image
 import json
 import re
 import os
-import weather_station
+import subprocess
+
 
 app = Flask('weather')
 app.config['SECRET_KEY'] = os.urandom(24)
@@ -40,9 +41,9 @@ def settings_view():
     if request.method == 'POST':
         data = request.form
         if "update" in data:
-            weather_station.main('screen')
+            subprocess.Popen(["python3", "weather_station.py", "screen"])
         elif "clear" in data:
-            weather_station.main("clear")
+            subprocess.Popen(["python3", "weather_station.py", "clear"])
 
     return render_template('settings.html')
 
