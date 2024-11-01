@@ -361,12 +361,12 @@ def prepare_image():
 
 
 def main(mode="no-screen"):
-    from waveshare_epd import epd7in5_V2
-        
-    epd = epd7in5_V2.EPD()
+    if mode != "no-screen":
+        from waveshare_epd import epd7in5_V2
+        epd = epd7in5_V2.EPD()
     
     # Display image or send to the screen
-    if mode == "test":
+    if mode == "no-screen":
         image = prepare_image()
         image.show(title="WeatherStation")
 
@@ -386,7 +386,7 @@ def main(mode="no-screen"):
 
 
 if __name__ == "__main__":
-    modes = ["test", "screen", "no-screen", "clear"]
+    modes = ["screen", "no-screen", "clear"]
 
     if len(sys.argv) > 1:
         if sys.argv[1] in modes:
