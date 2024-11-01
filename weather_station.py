@@ -99,7 +99,8 @@ def prepare_image():
     current_temp_fract = abs(int((current_temp_val - int(current_temp_val)) * 10))
     feel_temp_val = round(weather.current.feels_like,1)
     curr_temp_text = f'{int(current_temp_val)}'
-    if current_temp_val < 0 and curr_temp_text[0] != "-": curr_temp_text = "-" + curr_temp_text
+    if current_temp_val < 0 and curr_temp_text[0] != "-":
+        curr_temp_text = "-" + curr_temp_text
     curr_temp_fract_text = f'.{current_temp_fract}{chr(186)}C'
     curr_temp_width = draw.textlength(curr_temp_text, curr_temp_font)
 
@@ -206,11 +207,11 @@ def prepare_image():
 
     ### GRAPH - HOURLY FORECAST ###
 
-    FORECAST_HOURS_COUNT = 16
+    FORECAST_HOURS_COUNT = int(os.getenv("FORECAST_HOURS_COUNT"))
     FIG_WIDTH_INCHES = 4.98
     FIG_HEIGHT_INCHES = 2.38
-    fig_width = FIG_WIDTH_INCHES * 100  # pixels
-    fig_height = FIG_HEIGHT_INCHES * 100  # pixels
+    # fig_width = FIG_WIDTH_INCHES * 100  # pixels
+    # fig_height = FIG_HEIGHT_INCHES * 100  # pixels
 
     # Data from API
     dates = [hour_item.dt_dt for hour_item in weather.hourly][:FORECAST_HOURS_COUNT]
@@ -250,8 +251,10 @@ def prepare_image():
     # Setting y max/min label value always bigger/smaller than min/max temperature value
     y_ticks = ax.get_yticks()
     tick_diff = y_ticks[1] - y_ticks[0]
-    if y_ticks[-1] < max(temperatures): y_ticks.append(y_ticks[-1] + tick_diff)
-    if y_ticks[0] > min(temperatures): y_ticks.insert(0, y_ticks[-1] - tick_diff)
+    if y_ticks[-1] < max(temperatures):
+        y_ticks.append(y_ticks[-1] + tick_diff)
+    if y_ticks[0] > min(temperatures):
+        y_ticks.insert(0, y_ticks[-1] - tick_diff)
     ax.set_yticks(y_ticks)
 
     ax.set_ylim(bottom=y_ticks[0] - 0.1, top=y_ticks[-1] + 0.1)  # set y-axis limits always bigger/smaller than label value
@@ -267,7 +270,7 @@ def prepare_image():
     ax2.spines['right'].set_visible(False)
     ax2.spines['left'].set_visible(False)
 
-    ax2.set_ylabel(f'mm/h', rotation=0, loc="top")
+    ax2.set_ylabel('mm/h', rotation=0, loc="top")
     ax2.yaxis.set_label_coords(1.11, 1.05)
 
     # Creates plot
