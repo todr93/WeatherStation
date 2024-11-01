@@ -12,6 +12,12 @@ Application (screen mode) is created for Waveshare 7.5inch E-Ink (800×480) disp
 Some data (e.g. API key) needs to be stored in `.env` file.
 ```
 API_KEY=<your-open-weather-API-key>
+
+# User defined variables
+LATITUDE=<your-latitude-coordinate>
+LONGITUDE=<your-longitude-coordinate>
+
+FORECAST_HOURS_COUNT=16
 ```
 
 ## Usage
