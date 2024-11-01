@@ -68,7 +68,7 @@ class OpenWeather:
         if latitude is not None: latitude = str(latitude)
         if longitude is not None: longitude = str(longitude)
 
-        req = requests.get(f"https://api.openweathermap.org/data/2.5/onecall?lat={latitude}&lon={longitude}&appid={self.api_key}&units={self.units}")
+        req = requests.get(f"https://api.openweathermap.org/data/3.0/onecall?lat={latitude}&lon={longitude}&appid={self.api_key}&units={self.units}")
         return OneCallData.from_dict(json.loads(req.content))
     
 
