@@ -59,8 +59,8 @@ def prepare_image():
 
     # Data for API
     API_KEY = os.getenv("API_KEY")
-    LATITUDE = 50.0142814
-    LONGITUDE = 19.8799902
+    LATITUDE = os.getenv("LATITUDE")
+    LONGITUDE = os.getenv("LONGITUDE")
 
     base_dir = os.path.dirname(__file__)
 
