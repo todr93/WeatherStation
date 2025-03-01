@@ -9,12 +9,9 @@ def add_wifi_nmcli(ssid, password):
         result = subprocess.run(command, capture_output=True, text=True)
 
         if result.returncode == 0:
-            print(f"Successfully connected to {ssid}")
+            return result.returncode, ""
         else:
-            print(f"Failed to connect: {result.stderr}")
+            return result.returncode, result.stderr
     
     except Exception as e:
-        print(f"Error: {e}")
-
-# Usage
-add_wifi_nmcli("Your_SSID", "Your_Password")
+        return -1, e

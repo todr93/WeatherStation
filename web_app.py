@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_from_directory, redirect
+from flask import Flask, render_template, request, send_from_directory, redirect, abort
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileRequired
 from wtforms import FileField, ValidationError, StringField
@@ -127,10 +127,13 @@ def add_wifi():
         return "SSID and password are required", 400
 
     try:
-        add_wifi_nmcli(ssid, password)
-        return redirect('/settings')
+        result, error = add_wifi_nmcli(ssid, password)
+        if result == 0:
+            return redirect('/settings')
+        else:
+            raise abort(500, error)
     except Exception as e:
-        return f"Failed to add WiFi: {e}", 500
+        raise abort(500, e)
 
 
 if __name__ == '__main__':
