@@ -4,7 +4,7 @@ import subprocess
 def add_wifi_nmcli(ssid, password):
     try:
         command_list = [
-            "nmcli", "device", "wifi", "list", "--rescan", "yes"
+            "sudo", "nmcli", "device", "rescan"
         ]
         command_add = [
             "nmcli", "device", "wifi", "connect", ssid, "password", password
