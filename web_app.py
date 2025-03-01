@@ -1,15 +1,14 @@
-from flask import Flask
-from flask import render_template
-from flask import request
-from flask import send_from_directory
+from flask import Flask, render_template, request, send_from_directory, redirect
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileRequired, FileAllowed
-from wtforms import FileField, validators, ValidationError, StringField
+from flask_wtf.file import FileRequired
+from wtforms import FileField, ValidationError, StringField
 from PIL import Image
 import json
 import re
 import os
 import subprocess
+
+from utils.system_manager import add_wifi_nmcli
 
 
 app = Flask('weather')
@@ -88,7 +87,7 @@ def photos_view():
                 if img_name in active_images: active_images.remove(img_name)
 
         if 'active-all' in request.form:
-            active_images = [file for file in os.listdir(photo_dir) if not ".json" in file]
+            active_images = [file for file in os.listdir(photo_dir) if ".json" not in file]
 
         if 'deactive-all' in request.form:
             active_images = []
@@ -119,6 +118,20 @@ def send_photo(filename):
 def send_result_image():
     return send_from_directory('.', 'result_image.bmp', as_attachment=True)
 
+@app.route('/add_wifi', methods=['POST'])
+def add_wifi():
+    ssid = request.form.get('ssid')
+    password = request.form.get('password')
+
+    if not ssid or not password:
+        return "SSID and password are required", 400
+
+    try:
+        add_wifi_nmcli(ssid, password)
+        return redirect('/settings')
+    except Exception as e:
+        return f"Failed to add WiFi: {e}", 500
+
 
 if __name__ == '__main__':
-    app.run('localhost')
+    app.run('127.0.0.1')
