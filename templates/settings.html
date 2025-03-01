@@ -3,20 +3,38 @@
 {% block header %} Ustawienia stacji pogodowej {% endblock %}
 
 {% block content %}
-<ul>
-    <li>Ustawienie 1</li>
-    <li>Ustawienie 2</li>
-</ul>
+<div class="container mt-4">
 
-<!-- Update form -->
-<form method="POST" action="/settings">
-    <input type="hidden" name="update">
-    <button type="submit">Aktualizuj ekran e-Ink</button>
-</form>
+    <div class="row">
+        <div class="col-md-8">
+           
+            <!-- Update form -->
+            <form method="POST" action="/settings" class="mb-3">
+                <input type="hidden" name="update">
+                <button type="submit" class="btn btn-primary">Aktualizuj ekran e-Ink</button>
+            </form>
 
-<!-- Clear form -->
-<form method="POST" action="/settings">
-    <input type="hidden" name="clear">
-    <button type="submit">Wyczyść ekran e-Ink</button>
-</form>
+            <!-- Clear form -->
+            <form method="POST" action="/settings" class="mb-3">
+                <input type="hidden" name="clear">
+                <button type="submit" class="btn btn-secondary">Wyczyść ekran e-Ink</button>
+            </form>
+        </div>
+        <div class="col-md-4">
+            <!-- Formularz dodawania połączenia WiFi -->
+            <form method="POST" action="/add_wifi" class="mb-3">
+                <label class="font-weight-bold text-secondary">Dodaj sieć</label>
+                <div class="form-group">
+                    <label for="ssid">SSID:</label>
+                    <input type="text" id="ssid" name="ssid" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Hasło:</label>
+                    <input type="password" id="password" name="password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Dodaj połączenie WiFi</button>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
