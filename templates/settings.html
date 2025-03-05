@@ -19,7 +19,13 @@
                 <input type="hidden" name="clear">
                 <button type="submit" class="btn btn-secondary">Wyczyść ekran e-Ink</button>
             </form>
+            
+            <!-- Shutdown Raspberry Pi form -->
+            <form method="POST" action="/shutdown" class="mb-3" onsubmit="return confirm('Czy na pewno chcesz wyłączyć urządzenie?');">
+                <button type="submit" class="btn btn-danger">Wyłącz malinę</button>
+            </form>
         </div>
+
         <div class="col-md-4">
             <!-- Formularz dodawania połączenia WiFi -->
             <form method="POST" action="/add_wifi" class="mb-3">

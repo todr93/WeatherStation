@@ -118,6 +118,7 @@ def send_photo(filename):
 def send_result_image():
     return send_from_directory('.', 'result_image.bmp', as_attachment=True)
 
+
 @app.route('/add_wifi', methods=['POST'])
 def add_wifi():
     ssid = request.form.get('ssid')
@@ -134,6 +135,16 @@ def add_wifi():
             raise abort(500, error)
     except Exception as e:
         raise abort(500, e)
+    
+
+@app.route('/shutdown', methods=['POST'])
+def shutdown():
+    try:
+        os.system('sudo shutdown now')
+        return "Shutting down...", 200
+    except Exception as e:
+        return f"Error: {str(e)}", 500
+
 
 
 if __name__ == '__main__':
