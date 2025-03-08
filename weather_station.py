@@ -59,8 +59,8 @@ def prepare_image():
 
     # Data for API
     API_KEY = os.getenv("API_KEY")
-    LATITUDE = os.getenv("LATITUDE")
-    LONGITUDE = os.getenv("LONGITUDE")
+    LATITUDE = os.getenv("SETTING_LATITUDE")
+    LONGITUDE = os.getenv("SETTING_LONGITUDE")
 
     base_dir = os.path.dirname(__file__)
 
@@ -207,7 +207,7 @@ def prepare_image():
 
     ### GRAPH - HOURLY FORECAST ###
 
-    FORECAST_HOURS_COUNT = int(os.getenv("FORECAST_HOURS_COUNT"))
+    FORECAST_HOURS_COUNT = int(os.getenv("SETTING_FORECAST_HOURS_COUNT"))
     FIG_WIDTH_INCHES = 4.98
     FIG_HEIGHT_INCHES = 2.38
     # fig_width = FIG_WIDTH_INCHES * 100  # pixels
