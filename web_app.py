@@ -144,6 +144,16 @@ def shutdown():
         return "Shutting down...", 200
     except Exception as e:
         return f"Error: {str(e)}", 500
+    
+
+@app.route('/restart', methods=['POST'])
+def restart():
+    try:
+        os.system('sudo reboot')
+        return "Restarting...", 200
+    except Exception as e:
+        return f"Error: {str(e)}", 500
+
 
 
 
