@@ -19,6 +19,11 @@
                 <input type="hidden" name="clear">
                 <button type="submit" class="btn btn-secondary">Wyczyść ekran e-Ink</button>
             </form>
+
+            <!-- Restart Raspberry Pi form -->
+            <form method="POST" action="/restart" class="mb-3" onsubmit="return confirm('Czy na pewno chcesz zrestartować urządzenie?');">
+                <button type="submit" class="btn btn-warning">Restart</button>
+            </form>
             
             <!-- Shutdown Raspberry Pi form -->
             <form method="POST" action="/shutdown" class="mb-3" onsubmit="return confirm('Czy na pewno chcesz wyłączyć urządzenie?');">
