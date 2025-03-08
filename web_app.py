@@ -37,12 +37,6 @@ def home_view():
 
 @app.route('/settings', methods=['GET', 'POST'])
 def settings_view():
-    if request.method == 'POST':
-        data = request.form
-        if "update" in data:
-            subprocess.Popen(["python3", "weather_station.py", "screen"])
-        elif "clear" in data:
-            subprocess.Popen(["python3", "weather_station.py", "clear"])
 
     return render_template('settings.html')
 
@@ -135,6 +129,19 @@ def add_wifi():
             raise abort(500, error)
     except Exception as e:
         raise abort(500, e)
+    
+
+
+@app.route('/screen-update', methods=['POST'])
+def update_screen():
+    subprocess.Popen(["python3", "weather_station.py", "screen"])
+    return redirect('/settings')
+
+
+@app.route('/screen-clear', methods=['POST'])
+def clear_screen():
+    subprocess.Popen(["python3", "weather_station.py", "clear"])
+    return redirect('/settings')
     
 
 @app.route('/shutdown', methods=['POST'])
