@@ -9,6 +9,7 @@ import os
 import subprocess
 
 from utils.system_manager import add_wifi_nmcli
+from utils.settings_manager import read_settings, save_settings
 
 
 app = Flask('weather')
@@ -37,8 +38,15 @@ def home_view():
 
 @app.route('/settings', methods=['GET', 'POST'])
 def settings_view():
+    if request.method == "POST":
+        save_settings(request.form)
 
-    return render_template('settings.html')
+    context = {
+        "settings": read_settings()
+    }
+
+    return render_template('settings.html', **context)
+
 
 @app.route('/photos', methods=['GET', 'POST'])
 def photos_view():
