@@ -10,14 +10,12 @@
            
             <!-- Update form -->
             <form method="POST" action="/screen-update" class="mb-3">
-                <input type="hidden" name="update">
-                <button type="submit" class="btn btn-primary">Aktualizuj ekran e-Ink</button>
+                <button type="submit" class="btn btn-primary">Aktualizuj ekran</button>
             </form>
 
             <!-- Clear form -->
             <form method="POST" action="/screen-clear" class="mb-3">
-                <input type="hidden" name="clear">
-                <button type="submit" class="btn btn-secondary">Wyczyść ekran e-Ink</button>
+                <button type="submit" class="btn btn-secondary">Wyczyść ekran</button>
             </form>
 
             <!-- Restart Raspberry Pi form -->
@@ -27,10 +25,10 @@
             
             <!-- Shutdown Raspberry Pi form -->
             <form method="POST" action="/shutdown" class="mb-3" onsubmit="return confirm('Czy na pewno chcesz wyłączyć urządzenie?');">
-                <button type="submit" class="btn btn-danger">Wyłącz malinę</button>
+                <button type="submit" class="btn btn-danger">Wyłącz</button>
             </form>
 
-        <form method="POST" action="/settings" class="mb-3">
+        <form method="POST" action="/settings?saved=true" class="mb-3">
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -50,6 +48,10 @@
                 </tbody>
             </table>
             <button type="submit" class="btn btn-success">Zapisz ustawienia</button>
+
+            {% if request.args.get('saved') == 'true' %}
+                <span>Zapisano!</span>
+            {% endif %}
         </form>
         </div>
 
