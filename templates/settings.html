@@ -19,21 +19,21 @@
                 <!-- Clear form -->
                 <div class="col-6 mb-2">
                     <form method="POST" action="/screen-clear">
-                        <button type="submit" class="btn btn-light w-100">Wyczyść ekran</button>
+                        <button type="submit" class="btn btn-light btn-outline-dark w-100">Wyczyść ekran</button>
                     </form>
                 </div>
 
                 <!-- Restart Raspberry Pi form -->
                 <div class="col-6 mb-2">
                     <form method="POST" action="/restart" onsubmit="return confirm('Czy na pewno chcesz zrestartować urządzenie?');">
-                        <button type="submit" class="btn btn-light w-100">Restart</button>
+                        <button type="submit" class="btn btn-light btn-outline-warning w-100">Restart</button>
                     </form>
                 </div>
                 
                 <!-- Shutdown Raspberry Pi form -->
                 <div class="col-6 mb-2">
                     <form method="POST" action="/shutdown" onsubmit="return confirm('Czy na pewno chcesz wyłączyć urządzenie?');">
-                        <button type="submit" class="btn btn-light w-100">Wyłącz</button>
+                        <button type="submit" class="btn btn-light btn-outline-danger w-100">Wyłącz</button>
                     </form>
                 </div>
             </div>
